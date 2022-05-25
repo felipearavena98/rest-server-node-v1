@@ -1,5 +1,6 @@
 const express = require('express');
 const cors = require('cors');
+const { dbConnection } = require('../database/config');
 
 class Server {
     constructor() {
@@ -7,11 +8,18 @@ class Server {
         this.port = process.env.PORT;
         this.usersPath = '/api/users';
 
+        // Conect Data Base
+        this.cnnDB();
+
         // Middlewares
         this.middlewares();
         // Rutas de mi app
 
         this.routes();
+    }
+
+    async cnnDB() {
+        await dbConnection()
     }
 
     middlewares() {

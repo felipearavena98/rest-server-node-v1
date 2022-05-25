@@ -1,32 +1,61 @@
+const bcryptjs = require('bcryptjs');
 const { response } = require('express');
+const User = require('../models/user');
 
-const userGet = (req, res = response) => {
+const userGet = async (req, res = response) => {
 
-    const params = req.query;
+    const { limit = 5, from = 0 } = req.query;
+    const query = { state: true }
+
+    const [total, users] = await Promise.all([
+        User.countDocuments(query),
+        User.find(query)
+            .skip(Number(from))
+            .limit(Number(limit))
+    ])
 
     res.json({
-        msg: 'GET API - Cotroller',
-        params
+        total,
+        users
     })
 }
 
-const userPost = (req, res = response) => {
-    const { name, age } = req.body
+const userPost = async (req, res = response) => {
+
+
+
+    const { name, email, password, role } = req.body
+    const user = new User({ name, email, password, role });
+
+    // verify email
+
+
+    //verify password
+    // encrypt password
+    const salt = bcryptjs.genSaltSync();
+    user.password = bcryptjs.hashSync(password, salt);
+
+    await user.save();
 
     res.json({
-        msg: 'POST API - Cotroller',
-        name,
-        age
+        user
     })
 }
 
-const userPut = (req, res = response) => {
+const userPut = async (req, res = response) => {
 
     const { id } = req.params;
+    const { password, google, email, ...resto } = req.body;
 
-    res.json({
-        msg: 'PUT API - Cotroller'
-    })
+    // Validar contra la base de datos
+    if (password) {
+        const salt = bcryptjs.genSaltSync();
+        resto.password = bcryptjs.hashSync(password, salt);
+    }
+
+    const user = await User.findByIdAndUpdate(id, resto);
+
+    res.json(user)
 }
 
 const userPatch = (req, res = response) => {
@@ -35,10 +64,16 @@ const userPatch = (req, res = response) => {
     })
 }
 
-const userDelete = (req, res = response) => {
-    res.json({
-        msg: 'DELETE API - Cotroller'
-    })
+const userDelete = async (req, res = response) => {
+
+    const { id } = req.params;
+
+    // Delete fisical user from Data Bases
+    // const user = await User.findByIdAndDelete(id);
+
+    const user = await User.findByIdAndUpdate(id, { state: false });
+
+    res.json(user)
 }
 
 module.exports = {
