@@ -8,8 +8,13 @@ class Server {
         this.port = process.env.PORT;
 
         // Endpoints
-        this.usersPath = '/api/users';
-        this.authPath = '/api/auth';
+        this.paths = {
+            auth: '/api/auth',
+            category: '/api/category',
+            users: '/api/users',
+            product: '/api/products',
+            search: '/api/search'
+        }
 
         // Conect Data Base
         this.cnnDB();
@@ -37,8 +42,11 @@ class Server {
     }
 
     routes() {
-        this.app.use(this.authPath, require('../routes/auth'));
-        this.app.use(this.usersPath, require('../routes/user'));
+        this.app.use(this.paths.auth, require('../routes/auth'));
+        this.app.use(this.paths.category, require('../routes/category'));
+        this.app.use(this.paths.product, require('../routes/product'));
+        this.app.use(this.paths.users, require('../routes/user'));
+        this.app.use(this.paths.search, require('../routes/search'));
     }
 
     listen() {
