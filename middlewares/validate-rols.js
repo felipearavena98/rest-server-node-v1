@@ -14,6 +14,7 @@ const isAdminRole = (req, res = response, next) => {
         })
     }
 
+    next();
 }
 
 const haveRole = (...rols) => {
