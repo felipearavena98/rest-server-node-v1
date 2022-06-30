@@ -1,0 +1,925 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "version": "1.0.0",
+        "title": "Reset Server",
+        "description": "RestServer Node.js API",
+        "license": "ISC"
+    },
+    "servers": [
+        {
+            "url": "https://rest-server-v1-api.herokuapp.com",
+            "description": "Entorno de producción"
+        }
+    ],
+    "basePath": "",
+    "tags": [
+        {
+            "name": "User",
+            "description": "Api para usuarios"
+        },
+        {
+            "name": "Auth",
+            "description": "Api para la autenticación"
+        },
+        {
+            "name": "Product",
+            "description": "Api para manejar productos"
+        },
+        {
+            "name": "Category",
+            "description": "Api para manejar las categorias de los productos"
+        },
+        {
+            "name": "Search",
+            "description": "Api para filtrar/buscar"
+        },
+        {
+            "name": "Uploads",
+            "description": "Api para subir archivos"
+        }
+    ],
+    "consumes": [
+        "application/json"
+    ],
+    "produces": [
+        "application/json"
+    ],
+    "paths": {
+        "/api/users": {
+            "post": {
+                "tags": [
+                    "User"
+                ],
+                "summary": "Crear nuevo usuario en el servidor",
+                "description": "Crear nuevo usuario en el servidor",
+                "operationId": "userPost",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/User"
+                            },
+                            "example": {
+                                "name": "Test",
+                                "email": "test@correo.com",
+                                "password": "123456",
+                                "role": "USER_ROLE"
+                            }
+                        }
+                    }
+                },
+                "application/xml": {
+                    "schema": {
+                        "$ref": "#/components/schemas/User"
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Usuario creado correctamente!"
+                    }
+                }
+            },
+            "get": {
+                "tags": [
+                    "User"
+                ],
+                "summary": "Buscar usuarios en el servidor",
+                "description": "Buscar usuarios en el servidor",
+                "operationId": "userGet",
+                "parameters": [
+                    {
+                        "name": "from",
+                        "in": "query",
+                        "description": "Indique el numero desde el que quiere partir",
+                        "required": false,
+                        "type": "number",
+                        "collectionFormat": "multi"
+                    },
+                    {
+                        "name": "limit",
+                        "in": "query",
+                        "description": "Indique la cantidad de elementos",
+                        "required": false,
+                        "type": "number",
+                        "collectionFormat": "multi"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Usuario creado correctamente!",
+                        "examples": {
+                            "application/json": {
+                                "total": 20,
+                                "userGet": "array"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/users/{id}": {
+            "delete": {
+                "tags": [
+                    "User"
+                ],
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "description": "Crear nuevo usuario en el servidor",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "type": "string",
+                        "description": "Eliminar usuario por id"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Usuario eliminado",
+                        "examples": {
+                            "application/json": {
+                                "user": "array"
+                            }
+                        }
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "User"
+                ],
+                "summary": "Actualizar usuario",
+                "description": "Actualizar usuario",
+                "operationId": "userPut",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "type": "string",
+                        "description": "Pasos para crear un usuario"
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/User"
+                            },
+                            "example": {
+                                "name": "Test",
+                                "email": "test@correo.com",
+                                "password": "123456",
+                                "role": "USER_ROLE"
+                            }
+                        }
+                    }
+                },
+                "application/xml": {
+                    "schema": {
+                        "$ref": "#/components/schemas/User"
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Usuario Actualizado",
+                        "examples": {
+                            "application/json": {
+                                "userPut": "array"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Id invalido"
+                    },
+                    "404": {
+                        "description": "Id no encontrado"
+                    }
+                }
+            }
+        },
+        "/api/auth/login": {
+            "post": {
+                "tags": [
+                    "Auth"
+                ],
+                "description": "Crear nuevo usuario en el servidor",
+                "operationId": "login",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/definitions/Auth"
+                            },
+                            "example": {
+                                "email": "test@correo.com",
+                                "password": "sas3d2"
+                            }
+                        }
+                    }
+                },
+                "application/xml": {
+                    "schema": {
+                        "$ref": "#/components/definitions/Auth"
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Usuario creado correctamente!",
+                        "examples": {
+                            "application/json": {
+                                "login": "array"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/products": {
+            "post": {
+                "tags": [
+                    "Product"
+                ],
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "summary": "Crear nuevo producto",
+                "description": "Crear nuevo producto en el servidor",
+                "operationId": "createProduct",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Product"
+                            },
+                            "example": {
+                                "name": "Test",
+                                "category": "123abcda343",
+                                "price": 999
+                            }
+                        }
+                    }
+                },
+                "application/xml": {
+                    "schema": {
+                        "$ref": "#/components/schemas/Product"
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Producto creado correctamente!"
+                    }
+                }
+            },
+            "get": {
+                "tags": [
+                    "Product"
+                ],
+                "summary": "Buscar usuarios en el servidor",
+                "description": "Buscar usuarios en el servidor",
+                "operationId": "getProducts",
+                "parameters": [
+                    {
+                        "name": "from",
+                        "in": "query",
+                        "description": "Indique el numero desde el que quiere partir",
+                        "required": false,
+                        "type": "number",
+                        "collectionFormat": "multi"
+                    },
+                    {
+                        "name": "limit",
+                        "in": "query",
+                        "description": "Indique la cantidad de elementos",
+                        "required": false,
+                        "type": "number",
+                        "collectionFormat": "multi"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Usuario creado correctamente!",
+                        "examples": {
+                            "application/json": {
+                                "total": "array",
+                                "getProducts": "array"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/products/{id}": {
+            "get": {
+                "tags": [
+                    "Product"
+                ],
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "summary": "Buscar producto en el servidor",
+                "description": "Buscar producto en el servidor",
+                "operationId": "getProduct",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Indique el id del producto",
+                        "required": false,
+                        "type": "number"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Producto Obtenido",
+                        "examples": {
+                            "application/json": {
+                                "getProduct": "array"
+                            }
+                        }
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "Product"
+                ],
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "summary": "Actualizar producto",
+                "description": "Actualizar producto",
+                "operationId": "updateProduct",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "type": "string",
+                        "description": "Pasos para actualizar un producto"
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Product"
+                            },
+                            "example": {
+                                "name": "Test",
+                                "category": "123abcda343",
+                                "price": 999,
+                                "state": true
+                            }
+                        }
+                    }
+                },
+                "application/xml": {
+                    "schema": {
+                        "$ref": "#/components/schemas/Product"
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Producto Actualizado",
+                        "examples": {
+                            "application/json": {
+                                "updateProduct": "array"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Id invalido"
+                    },
+                    "404": {
+                        "description": "Id no encontrado"
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Product"
+                ],
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "description": "Eliminar una producto del servidor",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "type": "string",
+                        "description": "Eliminar producto por id"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Producto eliminado",
+                        "examples": {
+                            "application/json": {
+                                "productDelete": "array"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/category": {
+            "post": {
+                "tags": [
+                    "Category"
+                ],
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "summary": "Crear nueva categoria en el servidor",
+                "description": "Crear nueva categoria en el servidor",
+                "operationId": "createCategory",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Category"
+                            },
+                            "example": {
+                                "name": "Test"
+                            }
+                        }
+                    }
+                },
+                "application/xml": {
+                    "schema": {
+                        "$ref": "#/components/schemas/Category"
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "categoria creada correctamente!"
+                    }
+                }
+            },
+            "get": {
+                "tags": [
+                    "Category"
+                ],
+                "summary": "Buscar categorias en el servidor",
+                "description": "Buscar categorias en el servidor",
+                "operationId": "getCategories",
+                "parameters": [
+                    {
+                        "name": "from",
+                        "in": "query",
+                        "description": "Indique el numero desde el que quiere partir",
+                        "required": false,
+                        "type": "number",
+                        "collectionFormat": "multi"
+                    },
+                    {
+                        "name": "limit",
+                        "in": "query",
+                        "description": "Indique la cantidad de elementos",
+                        "required": false,
+                        "type": "number",
+                        "collectionFormat": "multi"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Categorias encontradas",
+                        "examples": {
+                            "application/json": {
+                                "total": "array",
+                                "getCategories": "array"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/category/{id}": {
+            "get": {
+                "tags": [
+                    "Category"
+                ],
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "summary": "Buscar categoria en el servidor",
+                "description": "Buscar categoria en el servidor",
+                "operationId": "getCategory",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Indique el id del producto",
+                        "required": false,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Categoria  encontrada",
+                        "examples": {
+                            "application/json": {
+                                "getCategory": "array"
+                            }
+                        }
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "Category"
+                ],
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "summary": "Actualizar categoria",
+                "description": "Actualizar categoria",
+                "operationId": "updateCategory",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "type": "string",
+                        "description": "Pasos para actualizar una categoria"
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Category"
+                            },
+                            "example": {
+                                "name": "Test"
+                            }
+                        }
+                    }
+                },
+                "application/xml": {
+                    "schema": {
+                        "$ref": "#/components/schemas/Category"
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "categoria Actualizado",
+                        "examples": {
+                            "application/json": {
+                                "updateCategory": "array"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Id invalido"
+                    },
+                    "404": {
+                        "description": "Id no encontrado"
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Category"
+                ],
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "description": "Eliminar una categoria del servidor",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "type": "string",
+                        "description": "Eliminar categoria por id"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Categoria eliminada",
+                        "examples": {
+                            "application/json": {
+                                "categoryDelete": "array"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/search/{coleccion}/{termino}": {
+            "get": {
+                "tags": [
+                    "Search"
+                ],
+                "description": "Crear nuevo usuario en el servidor",
+                "parameters": [
+                    {
+                        "name": "coleccion",
+                        "in": "path",
+                        "description": "Indique el numero desde el que quiere partir",
+                        "required": false,
+                        "type": "string",
+                        "collectionFormat": "multi"
+                    },
+                    {
+                        "name": "termino",
+                        "in": "path",
+                        "description": "Indique la cantidad de elementos",
+                        "required": false,
+                        "type": "string",
+                        "collectionFormat": "multi"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Categorias encontradas",
+                        "examples": {
+                            "application/json": {
+                                "total": "array",
+                                "getCategories": "array"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/uploads/products/{id}": {
+            "get": {
+                "tags": [
+                    "Uploads"
+                ],
+                "summary": "Ver imagen del producto",
+                "description": "Ver imagen del producto",
+                "operationId": "visualizeImg",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "el id del producto",
+                        "required": false,
+                        "type": "string",
+                        "collectionFormat": "multi"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Categorias encontradas",
+                        "examples": {
+                            "application/json": {
+                                "visualizeImg": "array"
+                            }
+                        }
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "Uploads"
+                ],
+                "summary": "Actualizar Imagen del Producto",
+                "description": "Actualizar categoria",
+                "operationId": "updateFileCloudinary",
+                "consumes": [
+                    "multipar/form-data"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "type": "string",
+                        "required": true,
+                        "description": "Id de producto"
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "file": {
+                                        "type": "string",
+                                        "format": "binary"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "response": {
+                    "200": {
+                        "description": "Categorias encontradas",
+                        "examples": {
+                            "application/json": {
+                                "updateFileCloudinary": "array"
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "securitySchemes": {
+            "bearerAuth": {
+                "type": "http",
+                "name": "x-token",
+                "scheme": "bearer",
+                "in": "path",
+                "bearerFormat": "JWT"
+            }
+        },
+        "definitions": {
+            "Auth": {
+                "type": "object",
+                "required": [
+                    "email",
+                    "password"
+                ],
+                "properties": {
+                    "email": {
+                        "type": "string"
+                    },
+                    "password": {
+                        "type": "string"
+                    }
+                }
+            }
+        },
+        "schemas": {
+            "User": {
+                "type": "object",
+                "required": [
+                    "name",
+                    "email",
+                    "password",
+                    "role"
+                ],
+                "properties": {
+                    "name": {
+                        "type": "string",
+                        "uniqueItems": false,
+                        "example": "Test"
+                    },
+                    "email": {
+                        "type": "string",
+                        "uniqueItems": true,
+                        "example": "test@correo.com"
+                    },
+                    "password": {
+                        "type": "string",
+                        "uniqueItems": false,
+                        "example": "123456"
+                    },
+                    "role": {
+                        "type": "string",
+                        "uniqueItems": false,
+                        "example": "USER_ROLE"
+                    },
+                    "state": {
+                        "type": "boolean",
+                        "uniqueItems": false
+                    },
+                    "google": {
+                        "type": "boolean",
+                        "uniqueItems": false
+                    }
+                }
+            },
+            "Product": {
+                "type": "object",
+                "required": [
+                    "name",
+                    "state",
+                    "user",
+                    "price",
+                    "category",
+                    "description",
+                    "available",
+                    "img"
+                ],
+                "properties": {
+                    "name": {
+                        "type": "string",
+                        "uniqueItems": false,
+                        "example": "Chocolate"
+                    },
+                    "state": {
+                        "type": "string",
+                        "uniqueItems": true,
+                        "example": true
+                    },
+                    "user": {
+                        "type": "string",
+                        "uniqueItems": false,
+                        "example": "Test"
+                    },
+                    "price": {
+                        "type": "number",
+                        "uniqueItems": false,
+                        "example": 1990
+                    },
+                    "category": {
+                        "type": "string",
+                        "uniqueItems": false,
+                        "example": "Candy"
+                    },
+                    "description": {
+                        "type": "string",
+                        "uniqueItems": false,
+                        "example": "Chocolate con pocas calorias"
+                    },
+                    "available": {
+                        "type": "boolean",
+                        "uniqueItems": false,
+                        "example": true
+                    },
+                    "img": {
+                        "type": "string",
+                        "uniqueItems": false,
+                        "example": "ASD2sd!##$@AASD"
+                    }
+                }
+            },
+            "Category": {
+                "type": "object",
+                "required": [
+                    "name",
+                    "state",
+                    "user"
+                ],
+                "properties": {
+                    "name": {
+                        "type": "string",
+                        "uniqueItems": false,
+                        "example": "string"
+                    },
+                    "state": {
+                        "type": "string",
+                        "uniqueItems": true,
+                        "example": true
+                    },
+                    "user": {
+                        "type": "string",
+                        "uniqueItems": false,
+                        "example": "string"
+                    }
+                }
+            },
+            "Role": {
+                "type": "object",
+                "required": [
+                    "role"
+                ],
+                "properties": {
+                    "role": {
+                        "type": "string",
+                        "uniqueItems": false,
+                        "required": true,
+                        "example": "USER_ROLE"
+                    }
+                }
+            }
+        }
+    },
+    "securitySchemes": [
+        {
+            "bearerAuth": []
+        }
+    ]
+}

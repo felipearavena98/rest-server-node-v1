@@ -2,6 +2,8 @@ const express = require('express');
 const cors = require('cors');
 const { dbConnection } = require('../database/config');
 const fileUpload = require('express-fileupload');
+const swaggerUi = require('swagger-ui-express');
+const swaggerDocument = require('../swagger.json');
 
 class Server {
     constructor() {
@@ -15,7 +17,8 @@ class Server {
             users: '/api/users',
             product: '/api/products',
             search: '/api/search',
-            uploads: '/api/uploads'
+            uploads: '/api/uploads',
+            swagger: '/api/docs',
         }
 
         // Conect Data Base
@@ -58,6 +61,7 @@ class Server {
         this.app.use(this.paths.users, require('../routes/user'));
         this.app.use(this.paths.search, require('../routes/search'));
         this.app.use(this.paths.uploads, require('../routes/uploads'));
+        this.app.use(this.paths.swagger, swaggerUi.serve, swaggerUi.setup(swaggerDocument));
     }
 
     listen() {

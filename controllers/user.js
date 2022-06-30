@@ -25,6 +25,7 @@ const userPost = async (req, res = response) => {
 
 
     const { name, email, password, role } = req.body
+    console.log(req.body)
     const user = new User({ name, email, password, role });
 
     // verify email

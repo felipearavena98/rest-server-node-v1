@@ -26,13 +26,12 @@ router.post('/', [
 router.put('/:id', [
     check('id', 'Is not valid ID').isMongoId(),
     check('id').custom(existUserById),
-    check('rol').custom(isRoleValid),
+    check('role').custom(isRoleValid),
     validarCampos
 ], userPut)
 
 router.delete('/:id', [
     validateJWT,
-    haveRole('ADMIN_ROLE'),
     check('id', 'Is not valid ID').isMongoId(),
     check('id').custom(existUserById),
     validarCampos

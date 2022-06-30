@@ -3,8 +3,9 @@ const Product = require('../models/product');
 const Role = require('../models/role');
 const User = require('../models/user');
 
+
 const isRoleValid = async (role = '') => {
-    const existRole = await Role.findOne({ role });
+    const existRole = await Role.findOne({ where: { role } });
     if (!existRole) {
         throw new Error(`El rol ${role} no está registrado en la BD`);
     }
